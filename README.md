@@ -1,2 +1,2 @@
-# Education plateform !
+# Education Platfrom!
 
