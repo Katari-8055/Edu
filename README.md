@@ -1,5 +1,3 @@
-
 # Education Platfrom!
-## Education Platfrom!
 
 
