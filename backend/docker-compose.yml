@@ -63,7 +63,7 @@ services:
   # Backend Service
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     container_name: education_backend
     environment:
