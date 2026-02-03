@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+}
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+enum ContentType {
+  VIDEO
+  PDF
+}
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+  PENDING
+}
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole
+  createdAt DateTime @default(now())
+  courses        Course[]      @relation("TeacherCourses")
+  lessons        Lesson[]
+  enrollments    Enrollment[]   
+  submissions    Submission[]
+  payments       Payment[]
+  liveClasses    LiveClass[]   @relation("TeacherLiveClasses")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  price       Int
+  teacherId   String
+  createdAt   DateTime @default(now())
+
+  teacher     User          @relation("TeacherCourses", fields: [teacherId], references: [id])
+  lessons     Lesson[]
+  assignments Assignment[]
+  enrollments Enrollment[]
+  payments    Payment[]
+  liveClasses LiveClass[]
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model Lesson {
+  id          String      @id @default(uuid())
+  courseId    String
+  teacherId   String
+  title       String
+  contentUrl  String
+  contentType ContentType
+  orderIndex  Int
+  createdAt   DateTime @default(now())
+
+  course  Course @relation(fields: [courseId], references: [id])
+  teacher User   @relation(fields: [teacherId], references: [id])
+
+  @@index([courseId])
+}
+
+model Assignment {
+  id        String   @id @default(uuid())
+  courseId  String
+  title     String
+  dueDate   DateTime
+  createdAt DateTime @default(now())
+
+  course       Course   @relation(fields: [courseId], references: [id])
+  submissions  Submission[]
+}
+
+model Submission {
+  id           String   @id @default(uuid())
+  assignmentId String
+  studentId    String
+  fileUrl      String
+  score        Int?
+  createdAt    DateTime @default(now())
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  student    User       @relation(fields: [studentId], references: [id])
+
+  @@unique([assignmentId, studentId])
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  userId    String
+  courseId  String
+  amount    Int
+  status    PaymentStatus
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+}
+
+model LiveClass {
+  id           String   @id @default(uuid())
+  courseId     String
+  teacherId    String
+  scheduledAt  DateTime
+  recordingUrl String?
+  createdAt    DateTime @default(now())
+
+  course  Course @relation(fields: [courseId], references: [id])
+  teacher User   @relation("TeacherLiveClasses", fields: [teacherId], references: [id])
+}
