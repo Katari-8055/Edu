@@ -1,20 +1,16 @@
-import express, { Application, Request, Response } from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
 dotenv.config();
-const app: Application = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.post("/login", async (req: Request, res: Response) => {
+
+const prisma = new PrismaClient();
+
+export const login = async (req: any, res: any) => {
     const { email, password } = req.body;
     try {
-        const prisma = new PrismaClient();
         const user = await prisma.user.findUnique({
             where: { email }
         });
+
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -25,11 +21,11 @@ app.post("/login", async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ message: "Internal server error", error });
     }
-});
-app.post("/register", async (req: Request, res: Response) => {
+};
+
+export const register = async (req: any, res: any) => {
     const { email, password, name } = req.body;
     try {
-        const prisma = new PrismaClient();
         const existingUser = await prisma.user.findUnique({
             where: { email }
         });
@@ -40,9 +36,8 @@ app.post("/register", async (req: Request, res: Response) => {
             data: { email, password, name, role: "STUDENT" }
         });
         return res.status(201).json({ message: "User registered successfully", newUser });
-    } catch (error) {
+    }
+    catch (error) {
         return res.status(500).json({ message: "Internal server error", error });
     }
-});
-
-export default app;
+};
