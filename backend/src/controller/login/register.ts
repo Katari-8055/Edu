@@ -1,8 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
-dotenv.config();
-
-const prisma = new PrismaClient();
+import prisma from "../../db/prisma";
 
 export const login = async (req: any, res: any) => {
     const { email, password } = req.body;

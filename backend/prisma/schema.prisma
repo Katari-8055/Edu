@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  engineType = "library"
 }
 datasource db {
   provider = "postgresql"
@@ -36,6 +37,7 @@ model User {
 model Course {
   id          String   @id @default(uuid())
   title       String
+  description String?
   price       Int
   teacherId   String
   createdAt   DateTime @default(now())

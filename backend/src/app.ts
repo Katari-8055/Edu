@@ -1,48 +1,14 @@
-import express, { Application, Request, Response } from "express";
-import mongoose from "mongoose";
+import express, { Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
+import { login, register } from "./controller/login/register";
+import { getProfile } from "./controller/profile";
 dotenv.config();
 const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.post("/login", async (req: Request, res: Response) => {
-    const { email, password } = req.body;
-    try {
-        const prisma = new PrismaClient();
-        const user = await prisma.user.findUnique({
-            where: { email }
-        });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        if (user.password !== password) {
-            return res.status(401).json({ message: "Invalid credentials" });
-        }
-        return res.status(200).json({ message: "Login successful", user });
-    } catch (error) {
-        return res.status(500).json({ message: "Internal server error", error });
-    }
-});
-app.post("/register", async (req: Request, res: Response) => {
-    const { email, password, name } = req.body;
-    try {
-        const prisma = new PrismaClient();
-        const existingUser = await prisma.user.findUnique({
-            where: { email }
-        });
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
-        }
-        const newUser = await prisma.user.create({
-            data: { email, password, name, role: "STUDENT" }
-        });
-        return res.status(201).json({ message: "User registered successfully", newUser });
-    } catch (error) {
-        return res.status(500).json({ message: "Internal server error", error });
-    }
-});
-
+app.post("/login", login);
+app.post("/register", register);
+app.post("/profile", getProfile);
 export default app;
