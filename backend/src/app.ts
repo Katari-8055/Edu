@@ -10,5 +10,5 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.post("/login", login);
 app.post("/register", register);
-app.post("/profile", getProfile);
+app.get("/profile", getProfile);
 export default app;
