@@ -1,6 +1,9 @@
 import prisma from "./../db/prisma";
 export const getProfile = async (req: any, res: any) => {
-    const userId = req.query.userId;
+    const userId = req.query.userId ?? req.query.id ?? req.body?.id;
+    if (!userId || typeof userId !== "string") {
+        return res.status(400).json({ message: "Missing or invalid user id" });
+    }
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId },
