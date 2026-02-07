@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
     "module": "CommonJS",
     "target": "ES2020",
     "strict": true,
     "esModuleInterop": true
   },
-  "include": ["src"],
+  "include": ["src","mongo"],
   "exclude": ["node_modules", "dist", "prisma", "prisma.config.ts"]
 }
