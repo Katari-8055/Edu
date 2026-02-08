@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPost extends Document {
-  courseId: string;
   user: {
     id: string;
     name: string;
@@ -13,8 +12,6 @@ export interface IPost extends Document {
 
 const PostSchema = new Schema<IPost>(
   {
-    courseId: { type: String, required: true },
-
     user: {
       id: { type: String, required: true },
       name: { type: String, required: true },
@@ -26,7 +23,6 @@ const PostSchema = new Schema<IPost>(
   { timestamps: { createdAt: true, updatedAt: false } }
 );
 
-PostSchema.index({ courseId: 1, createdAt: -1 });
 
 export const Post = mongoose.model<IPost>("Post", PostSchema);
 
