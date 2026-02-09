@@ -1,3 +1,2 @@
 # Education Platfrom!
-# Test
 
