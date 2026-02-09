@@ -1,9 +1,8 @@
 import { Post } from "../../../mongo/schema";
 export const createPost = async (req: any, res: any) => {
-    const { courseId, content } = req.body;
+    const { content } = req.body;
     try {
         const newPost = await Post.create({
-            courseId,
             content,
             user: { id: req.user.id, name: req.user.name }
         });
