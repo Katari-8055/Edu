@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { login, register } from "./controller/login/register";
 import cookieParser from "cookie-parser";
 import { verifyToken } from "./middleware/verfy";
-import { createPost } from "./controller/posts/post";
+import { createCourse,deleteCourse,getCourses,} from "./controller/course/course";
 dotenv.config();
 const app: Application = express();
 app.use(express.json());
@@ -18,5 +18,7 @@ app.get("/test", (req, res) => {
 
 app.post("/login", login);
 app.post("/register", register);
-app.post("/post", verifyToken, createPost);
+app.post("/create-course", verifyToken, createCourse);
+app.post("/delete-course/:id", verifyToken, deleteCourse);
+app.get("/courses", getCourses);
 export default app;
