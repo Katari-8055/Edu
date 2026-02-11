@@ -77,8 +77,8 @@ export const deleteCourse = async (req: any, res: any) => {
         if (!course) {
             return res.status(404).json({ message: "Course not found" });
         }
-        if (req.user.role !== "ADMIN") {
-            return res.status(403).json({ message: "Forbidden: Only admin can delete courses" });
+        if (req.user.role !== "ADMIN" && course.teacher.id !== req.user.id) {
+            return res.status(403).json({ message: "Forbidden: Only admin or the instructor can delete this course" });
         }
         await prisma.course.delete({
             where: { id }
