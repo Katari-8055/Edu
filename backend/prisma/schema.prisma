@@ -57,7 +57,7 @@ model Enrollment {
   createdAt DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
 }
@@ -72,7 +72,7 @@ model Lesson {
   orderIndex  Int
   createdAt   DateTime @default(now())
 
-  course  Course @relation(fields: [courseId], references: [id])
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   teacher User   @relation(fields: [teacherId], references: [id])
 
   @@index([courseId])
@@ -85,7 +85,7 @@ model Assignment {
   dueDate   DateTime
   createdAt DateTime @default(now())
 
-  course       Course   @relation(fields: [courseId], references: [id])
+  course       Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   submissions  Submission[]
 }
 
@@ -97,7 +97,7 @@ model Submission {
   score        Int?
   createdAt    DateTime @default(now())
 
-  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
   student    User       @relation(fields: [studentId], references: [id])
 
   @@unique([assignmentId, studentId])
@@ -112,7 +112,7 @@ model Payment {
   createdAt DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model LiveClass {
@@ -123,6 +123,6 @@ model LiveClass {
   recordingUrl String?
   createdAt    DateTime @default(now())
 
-  course  Course @relation(fields: [courseId], references: [id])
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   teacher User   @relation("TeacherLiveClasses", fields: [teacherId], references: [id])
 }
